@@ -1,56 +1,78 @@
 <!doctype html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0d1832" />
-    <meta name="description" content="C++ Bot — интерактивный курс на один день: 6 тем, 36 заданий, подсказки, примеры и сохранение прогресса." />
-    <title>C++ Bot — 36 заданий за один день</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="data.js" defer></script>
-    <script src="app.js" defer></script>
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Перейти к урокам</a>
-    <header class="site-header">
-      <div class="container header-inner">
-        <a class="brand" href="#top"><span class="brand-icon" aria-hidden="true">{ }</span><span>C++ <strong>Bot</strong></span></a>
-        <nav aria-label="Основная навигация" class="main-nav"><a href="#roadmap">Маршрут</a><a href="#workspace">Задания</a><a href="#how">Как учиться</a></nav>
-        <a class="header-progress" href="#workspace"><span class="progress-pulse" aria-hidden="true"></span><span id="headerCount">0 / 36 выполнено</span></a>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f9fc">
+  <meta name="description" content="C++ Bot: 36 понятных заданий, короткие уроки и практика на русском и английском.">
+  <title>C++ Bot — учись на практике</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="data.js" defer></script>
+  <script src="en.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace" data-i18n="skip">Перейти к заданиям</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="C++ Bot"><span class="brand-mark" aria-hidden="true">&lt;/&gt;</span><span>C++ <strong>Bot</strong></span></a>
+      <nav class="main-nav" aria-label="Основная навигация" data-i18n-aria="nav"><a href="#roadmap" data-i18n="navTopics">Темы</a><a href="#workspace" data-i18n="navTasks">Задания</a><a href="#how" data-i18n="navHow">Как учиться</a></nav>
+      <div class="header-right">
+        <span class="header-progress" id="headerCount">0 / 36</span>
+        <div class="language-switch" role="group" aria-label="Язык сайта" data-i18n-aria="language"><button type="button" data-lang="ru" aria-pressed="true">RU</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
       </div>
-    </header>
-
-    <main id="main">
-      <section class="hero" id="top">
-        <div class="hero-grid" aria-hidden="true"></div>
-        <div class="container hero-inner">
-          <div class="hero-copy">
-            <p class="eyebrow"><span class="eyebrow-line"></span> ОБУЧЕНИЕ ЧЕРЕЗ ПРАКТИКУ</p>
-            <h1>C++ за один день.<br /><span>36 заданий.</span><br />Один робот рядом.</h1>
-            <p class="hero-lead">От первой строки до массивов и функций. Учись небольшими шагами: читай объяснение, пробуй задачу, смотри подсказку и отмечай успех.</p>
-            <div class="hero-actions"><button class="button button-primary" type="button" id="heroStart">Начать первое задание <span aria-hidden="true">↗</span></button><a class="hero-secondary" href="#how">Как устроен курс</a></div>
-            <div class="hero-facts"><span>◉ 6 тем</span><span>◉ 36 упражнений</span><span>◉ прогресс сохраняется</span></div>
-          </div>
-          <div class="hero-visual"><div class="robot-orbit orbit-outer"></div><div class="robot-orbit orbit-inner"></div><img src="assets/robot.png" alt="Дружелюбный робот помощник C++ Bot" /><div class="robot-bubble"><span aria-hidden="true">✦</span><span id="robotMessage">Привет! Начнём с простого.</span></div><div class="hero-code" aria-hidden="true"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><code>std::cout &lt;&lt; "Ты справишься!";</code></div></div>
+    </div>
+  </header>
+  <main>
+    <section class="hero" id="top">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-dot"></span><span data-i18n="heroKicker">ТВОЙ СПОКОЙНЫЙ СТАРТ В C++</span></p>
+          <h1 data-i18n="heroTitle">Учиться программировать проще, когда есть план.</h1>
+          <p class="hero-lead" data-i18n="heroLead">36 небольших заданий, 6 понятных тем и робот, который подскажет, если застрянешь. Проходи в удобном темпе.</p>
+          <div class="hero-actions"><button class="button button-primary" id="heroStart" type="button" data-i18n="start">Начать обучение</button><a class="text-link" href="#roadmap" data-i18n="viewTopics">Посмотреть темы</a></div>
+          <div class="hero-points"><span data-i18n="point1">✓ Короткие объяснения</span><span data-i18n="point2">✓ Мгновенная проверка вопросов</span><span data-i18n="point3">✓ Прогресс сохранится</span></div>
         </div>
-      </section>
-
-      <section class="progress-section" aria-label="Твой прогресс"><div class="container progress-layout"><div><p class="eyebrow">МИССИЯ НА СЕГОДНЯ</p><h2>Пройди свой <em>маршрут</em></h2><p>Можно заниматься в своём темпе. Результат останется в этом браузере.</p></div><div class="progress-card"><div class="progress-top"><strong id="progressPercent">0%</strong><span id="progressCount">0 из 36 заданий</span></div><div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="36" aria-valuenow="0" aria-label="Пройденные задания"><span id="progressFill"></span></div><p id="progressMessage">Первое задание уже ждёт тебя.</p><button class="button button-primary progress-start" type="button" id="progressStart">Начать первое задание</button></div></div></section>
-
-      <section class="roadmap section" id="roadmap" aria-labelledby="roadmapTitle"><div class="container"><div class="section-heading"><div><p class="eyebrow">ШЕСТЬ ШАГОВ К ЦЕЛИ</p><h2 id="roadmapTitle">Маршрут <em>одного дня</em></h2></div><p>Каждая тема начинается с короткого урока, а затем даёт шесть разных заданий.</p></div><div class="module-grid" id="moduleGrid"></div></div></section>
-
-      <section class="learning-section section" id="how" aria-labelledby="howTitle"><div class="container learning-grid"><div class="learning-copy"><p class="eyebrow">КАК УЧИТЬСЯ</p><h2 id="howTitle">Не зубри.<br /><em>Пробуй сам.</em></h2><p>Робот ведёт тебя по темам постепенно. После каждого маленького урока попробуй решить задания до того, как открыть образец.</p><div class="learning-steps"><div><span>01</span><p><strong>Прочитай объяснение.</strong> В каждой теме есть пример программы и ключевая идея.</p></div><div><span>02</span><p><strong>Реши задание.</strong> Вопросы проверяются сразу. Для кода есть редактор, подсказка и образец.</p></div><div><span>03</span><p><strong>Проверь C++ код.</strong> Запусти его в своём компиляторе или сверь с образцом, затем отметь задачу выполненной.</p></div></div></div><div class="terminal-card" aria-label="Пример программы C++"><div class="terminal-top"><div><i></i><i></i><i></i></div><span>hello.cpp</span></div><pre><code><span class="syntax-purple">#include</span> &lt;iostream&gt;
-
-<span class="syntax-pink">int</span> main() {
-    std::cout &lt;&lt; <span class="syntax-green">"Привет, мир!"</span>;
-    <span class="syntax-purple">return</span> 0;
-}</code></pre><div class="terminal-result"><span>› результат</span><strong>Привет, мир!</strong></div></div></div></section>
-
-      <section class="workspace section" id="workspace" aria-labelledby="workspaceTitle"><div class="container"><div class="section-heading workspace-heading"><div><p class="eyebrow">ПРАКТИКА</p><h2 id="workspaceTitle">36 заданий. <em>Поехали?</em></h2></div><p>Выбирай тему или проходи всё по порядку. Завершённые задания отмечены галочкой.</p></div><div class="workspace-toolbar"><div class="module-filter" id="moduleFilter" role="group" aria-label="Выбор темы"></div><div class="type-filter" role="group" aria-label="Тип заданий"><button type="button" class="filter-button is-active" data-filter="all" aria-pressed="true">Все</button><button type="button" class="filter-button" data-filter="quiz" aria-pressed="false">Вопросы</button><button type="button" class="filter-button" data-filter="code" aria-pressed="false">Код</button><button type="button" class="filter-button" data-filter="todo" aria-pressed="false">Не готово</button></div></div><div class="lesson-panel" id="lessonPanel"></div><div class="task-list" id="taskList"></div><p class="empty-state" id="emptyState" hidden>Здесь пока нет заданий. Выбери другой фильтр.</p></div></section>
-    </main>
-
-    <footer class="site-footer"><div class="container footer-inner"><div><a class="brand" href="#top"><span class="brand-icon" aria-hidden="true">{ }</span><span>C++ <strong>Bot</strong></span></a><p>Практика превращает сложное в понятное.</p></div><p>36 заданий · 6 тем · 1 день<br /><span id="year">2026</span></p></div></footer>
-
-    <dialog class="task-dialog" id="taskDialog" aria-labelledby="dialogTitle"><div class="dialog-shell"><button class="dialog-close" type="button" id="dialogClose" aria-label="Закрыть задание">×</button><div class="dialog-heading"><span class="dialog-number" id="dialogNumber">Задание 01</span><span class="dialog-type" id="dialogType">Вопрос</span></div><h2 id="dialogTitle">Задание</h2><p class="dialog-topic" id="dialogTopic"></p><div class="dialog-lesson"><div class="mini-label">МИНИ-УРОК</div><p id="dialogLesson"></p><pre><code id="dialogExample"></code></pre></div><div class="dialog-task"><div class="mini-label">ТВОЯ ЗАДАЧА</div><p id="dialogPrompt"></p><p class="sample-output" id="dialogSample"></p><div id="quizArea" class="quiz-options"></div><div id="codeArea" class="code-area" hidden><label for="codeEditor">Твой C++ код</label><textarea id="codeEditor" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea><p class="code-note">Сайт хранит твой черновик. Он не запускает C++: проверь код в компиляторе или сравни с образцом.</p><label class="self-check"><input type="checkbox" id="selfCheck" /> Я проверил решение в компиляторе или сверил с образцом</label></div></div><div class="dialog-help"><button type="button" class="help-button" id="hintButton">Показать подсказку</button><p id="hintText" hidden></p><button type="button" class="help-button" id="solutionButton" hidden>Показать образец решения</button><pre id="solutionBox" hidden><code id="solutionCode"></code></pre></div><div class="dialog-feedback" id="dialogFeedback" role="status" aria-live="polite"></div><div class="dialog-actions"><button class="button button-quiet" type="button" id="prevTask">Предыдущее</button><button class="button button-primary" type="button" id="checkTask">Проверить ответ</button><button class="button button-primary" type="button" id="completeTask" hidden>Отметить выполненным</button><button class="button button-quiet" type="button" id="nextTask">Следующее</button></div></div></dialog>
-  </body>
+        <div class="hero-visual"><div class="robot-halo"></div><img src="assets/robot.png" alt="Робот помощник C++ Bot" data-i18n-alt="robotAlt"><div class="robot-note"><span class="note-spark">✦</span><span id="robotMessage">Начнём вместе!</span></div></div>
+      </div>
+    </section>
+    <section class="dashboard" aria-label="Твой прогресс" data-i18n-aria="progressLabel">
+      <div class="container dashboard-inner">
+        <div class="dashboard-heading"><span class="dashboard-icon" aria-hidden="true">◎</span><div><strong data-i18n="progressTitle">Твой прогресс</strong><p id="progressMessage">Первое задание уже ждёт.</p></div></div>
+        <div class="dashboard-meter"><div class="meter-label"><strong id="progressCount">0 из 36 заданий</strong><span id="progressPercent">0%</span></div><div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="36" aria-valuenow="0" aria-label="Пройденные задания" data-i18n-aria="progressBar"><span id="progressFill"></span></div></div>
+        <button type="button" class="button button-primary progress-start" id="progressStart">Начать первое задание</button>
+      </div>
+    </section>
+    <section class="section roadmap" id="roadmap">
+      <div class="container">
+        <div class="section-heading"><div><p class="eyebrow" data-i18n="roadKicker">МАРШРУТ</p><h2 data-i18n="roadTitle">Шесть тем. Шаг за шагом.</h2></div><p data-i18n="roadLead">Начни с первых строк и постепенно дойди до массивов и функций.</p></div>
+        <div class="module-grid" id="moduleGrid"></div>
+      </div>
+    </section>
+    <section class="section workspace" id="workspace">
+      <div class="container">
+        <div class="section-heading"><div><p class="eyebrow" data-i18n="practiceKicker">ПРАКТИКА</p><h2 data-i18n="practiceTitle">Выбери задание</h2></div><p data-i18n="practiceLead">Можно идти по порядку или выбрать интересную тему. Вернись к заданию в любой момент.</p></div>
+        <div class="workspace-layout">
+          <aside class="topics-panel"><h3 data-i18n="topicHeading">Темы курса</h3><div class="module-filter" id="moduleFilter" role="group" aria-label="Выбор темы" data-i18n-aria="topicHeading"></div><div class="topics-tip"><span aria-hidden="true">✦</span><p data-i18n="topicsTip">Совет: прочитай мини-урок перед первым заданием каждой темы.</p></div></aside>
+          <div class="practice-main">
+            <div class="lesson-panel" id="lessonPanel"></div>
+            <div class="task-toolbar"><h3 data-i18n="taskHeading">Задания</h3><div class="type-filter" role="group" aria-label="Тип заданий" data-i18n-aria="typeHeading"><button type="button" class="filter-button is-active" data-filter="all" aria-pressed="true" data-i18n="all">Все</button><button type="button" class="filter-button" data-filter="quiz" aria-pressed="false" data-i18n="questions">Вопросы</button><button type="button" class="filter-button" data-filter="code" aria-pressed="false" data-i18n="code">Код</button><button type="button" class="filter-button" data-filter="todo" aria-pressed="false" data-i18n="todo">Остались</button></div></div>
+            <div class="task-list" id="taskList"></div><p class="empty-state" id="emptyState" hidden data-i18n="empty">Здесь пока нет заданий. Выбери другой фильтр.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section how" id="how"><div class="container how-inner"><div><p class="eyebrow" data-i18n="howKicker">КАК ЭТО РАБОТАЕТ</p><h2 data-i18n="howTitle">Маленькие шаги дают результат.</h2></div><div class="how-steps"><div><span>01</span><strong data-i18n="step1Title">Прочитай</strong><p data-i18n="step1Text">К каждой теме есть короткий урок и пример C++.</p></div><div><span>02</span><strong data-i18n="step2Title">Попробуй</strong><p data-i18n="step2Text">Ответь на вопрос или напиши код. Подсказка рядом.</p></div><div><span>03</span><strong data-i18n="step3Title">Проверь</strong><p data-i18n="step3Text">Вопросы сайт проверит сразу. Код запусти в своём компиляторе или сравни с образцом.</p></div></div></div></section>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><span class="brand"><span class="brand-mark" aria-hidden="true">&lt;/&gt;</span><span>C++ <strong>Bot</strong></span></span><p data-i18n="footer">Учись в своём темпе. Возвращайся когда удобно.</p><span id="year"></span></div></footer>
+  <dialog class="task-dialog" id="taskDialog" aria-labelledby="dialogTitle"><div class="dialog-shell">
+    <div class="dialog-top"><div class="dialog-heading"><span id="dialogNumber"></span><span class="dialog-type" id="dialogType"></span></div><button class="dialog-close" type="button" id="dialogClose" aria-label="Закрыть задание" data-i18n-aria="close">×</button></div>
+    <h2 id="dialogTitle"></h2><p class="dialog-topic" id="dialogTopic"></p>
+    <div class="dialog-lesson"><div class="mini-label" data-i18n="miniLesson">МИНИ-УРОК</div><p id="dialogLesson"></p><pre><code id="dialogExample"></code></pre></div>
+    <div class="dialog-task"><div class="mini-label" data-i18n="yourTask">ТВОЯ ЗАДАЧА</div><p id="dialogPrompt"></p><p class="sample-output" id="dialogSample"></p><div id="quizArea" class="quiz-options"></div><div id="codeArea" class="code-area" hidden><label for="codeEditor" data-i18n="yourCode">Твой C++ код</label><textarea id="codeEditor" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea><p class="code-note" data-i18n="codeNote">Черновик сохраняется в браузере. Сайт не запускает C++: проверь код в компиляторе или сравни с образцом.</p><label class="self-check"><input type="checkbox" id="selfCheck"><span data-i18n="selfCheck">Я проверил решение в компиляторе или сверил с образцом</span></label></div></div>
+    <div class="dialog-help"><button type="button" class="help-button" id="hintButton"></button><p id="hintText" hidden></p><button type="button" class="help-button" id="solutionButton" hidden></button><pre id="solutionBox" hidden><code id="solutionCode"></code></pre></div>
+    <div class="dialog-feedback" id="dialogFeedback" role="status" aria-live="polite"></div>
+    <div class="dialog-actions"><button class="button button-quiet" type="button" id="prevTask"></button><button class="button button-primary" type="button" id="checkTask"></button><button class="button button-primary" type="button" id="completeTask" hidden></button><button class="button button-quiet" type="button" id="nextTask"></button></div>
+  </div></dialog>
+</body>
 </html>
