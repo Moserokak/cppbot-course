@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Запускай C++ код прямо в браузере и возвращайся к заданиям C++ Bot.">
+  <title>Компилятор C++ — C++ Bot</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="playground.css">
+  <script src="playground.js" defer></script>
+</head>
+<body class="playground-page">
+  <a class="skip-link" href="#compiler" data-i18n="skip">К компилятору</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html#top" aria-label="C++ Bot"><span class="brand-mark" aria-hidden="true">&lt;/&gt;</span><span>C++ <strong>Bot</strong></span></a>
+      <a class="playground-back" href="index.html#workspace" data-i18n="back">Вернуться к заданиям</a>
+      <div class="language-switch" role="group" aria-label="Язык сайта"><button type="button" data-lang="ru" aria-pressed="true">RU</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
+    </div>
+  </header>
+  <main class="container playground-main" id="compiler">
+    <div class="playground-intro">
+      <div>
+        <p class="eyebrow"><span class="eyebrow-dot"></span><span data-i18n="kicker">ТВОЯ ЛАБОРАТОРИЯ C++</span></p>
+        <h1 data-i18n="title">Пиши код. Запускай. Смотри результат.</h1>
+        <p class="playground-lead" data-i18n="lead">Нажми Run в редакторе. Если программа ждёт данные через cin, добавь их в поле Stdin. Ответ и ошибки появятся в Output.</p>
+      </div>
+      <div class="playground-robot" aria-hidden="true"><img src="assets/robot.png" alt=""></div>
+    </div>
+    <div class="playground-label"><span class="file-chip">main.cpp</span><span data-i18n="powered">Настоящий C++ компилятор</span></div>
+    <figure class="compiler-frame">
+      <iframe id="compilerFrame" src="https://coddy.tech/embed-editor?lang=cpp&amp;theme=auto&amp;credit=0" title="Редактор кода C++ от Coddy" loading="eager" referrerpolicy="no-referrer"></iframe>
+      <figcaption><span data-i18n="creditLead">Редактор и запуск кода:</span> <a href="https://coddy.tech/embed/ru?editorLang=cpp" target="_blank" rel="noopener noreferrer">Coddy</a></figcaption>
+    </figure>
+    <p class="playground-tip" data-i18n="tip">Код из задания откроется здесь автоматически. Изменения в компиляторе остаются в этой песочнице; черновик задания хранится в C++ Bot.</p>
+  </main>
+</body>
+</html>

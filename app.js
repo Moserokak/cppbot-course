@@ -24,18 +24,18 @@ const $ = selector => document.querySelector(selector);
 const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
 const ui = {
   ru: {
-    skip:'Перейти к заданиям',nav:'Основная навигация',navTopics:'Темы',navTasks:'Задания',navHow:'Как учиться',language:'Язык сайта',darkTheme:'Включить тёмную тему',lightTheme:'Включить светлую тему',
+    skip:'Перейти к заданиям',nav:'Основная навигация',navTopics:'Темы',navTasks:'Задания',navCompiler:'Компилятор',navHow:'Как учиться',language:'Язык сайта',darkTheme:'Включить тёмную тему',lightTheme:'Включить светлую тему',
     accountKicker:'ЛИЧНЫЙ ПРОГРЕСС',accountTitle:'Учись с любого устройства',accountLead:'Создай аккаунт, чтобы задания и черновики сохранялись между устройствами.',accountTabs:'Вход или регистрация',signIn:'Войти',signUp:'Регистрация',email:'Электронная почта',password:'Пароль',accountNote:'После регистрации может понадобиться подтвердить почту.',accountReady:'Прогресс сохранён',accountSync:'Задания и черновики синхронизируются с аккаунтом.',signOut:'Выйти',accountWait:'Проверяем аккаунт…',checkEmail:'Проверь почту и перейди по ссылке подтверждения, затем войди.',authError:'Не удалось войти. Проверь почту и пароль.',signupError:'Не удалось создать аккаунт. Проверь данные и попробуй ещё.',syncError:'Не удалось сохранить прогресс в аккаунте. Проверь интернет и попробуй ещё.',
     heroKicker:'ТВОЙ СПОКОЙНЫЙ СТАРТ В C++',heroTitle:'Учиться программировать проще, когда есть план.',
     heroLead:'36 небольших заданий, 6 понятных тем и робот, который подскажет, если застрянешь. Проходи в удобном темпе.',
-    start:'Начать обучение',viewTopics:'Посмотреть темы',point1:'✓ Короткие объяснения',point2:'✓ Мгновенная проверка вопросов',point3:'✓ Прогресс сохранится',robotAlt:'Робот помощник C++ Bot',
+    start:'Начать обучение',viewTopics:'Посмотреть темы',openCompiler:'Компилятор C++',point1:'✓ Короткие объяснения',point2:'✓ Мгновенная проверка вопросов',point3:'✓ Прогресс сохранится',robotAlt:'Робот помощник C++ Bot',
     progressLabel:'Твой прогресс',progressTitle:'Твой прогресс',progressBar:'Пройденные задания',
     roadKicker:'МАРШРУТ',roadTitle:'Шесть тем. Шаг за шагом.',roadLead:'Начни с первых строк и постепенно дойди до массивов и функций.',
     practiceKicker:'ПРАКТИКА',practiceTitle:'Выбери задание',practiceLead:'Можно идти по порядку или выбрать интересную тему. Вернись к заданию в любой момент.',
     topicHeading:'Темы курса',topicsTip:'Совет: прочитай мини-урок перед первым заданием каждой темы.',taskHeading:'Задания',typeHeading:'Тип заданий',all:'Все',questions:'Вопросы',code:'Код',todo:'Остались',empty:'Здесь пока нет заданий. Выбери другой фильтр.',
-    howKicker:'КАК ЭТО РАБОТАЕТ',howTitle:'Маленькие шаги дают результат.',step1Title:'Прочитай',step1Text:'К каждой теме есть короткий урок и пример C++.',step2Title:'Попробуй',step2Text:'Ответь на вопрос или напиши код. Подсказка рядом.',step3Title:'Проверь',step3Text:'Вопросы сайт проверит сразу. Код запусти в своём компиляторе или сравни с образцом.',
+    howKicker:'КАК ЭТО РАБОТАЕТ',howTitle:'Маленькие шаги дают результат.',step1Title:'Прочитай',step1Text:'К каждой теме есть короткий урок и пример C++.',step2Title:'Попробуй',step2Text:'Ответь на вопрос или напиши код. Подсказка рядом.',step3Title:'Проверь',step3Text:'Вопросы сайт проверит сразу. Код запусти во встроенном компиляторе.',
     footer:'Учись в своём темпе. Возвращайся когда удобно.',close:'Закрыть задание',miniLesson:'МИНИ-УРОК',yourTask:'ТВОЯ ЗАДАЧА',yourCode:'Твой C++ код',
-    codeNote:'Черновик сохраняется в браузере. Сайт не запускает C++: проверь код в компиляторе или сравни с образцом.',selfCheck:'Я проверил решение в компиляторе или сверил с образцом',
+    codeNote:'Черновик задания сохраняется. Открой компилятор, чтобы запустить код и увидеть результат.',runCode:'Запустить код',selfCheck:'Я проверил решение в компиляторе или сверил с образцом',
     first:'Начать первое задание',continue:n=>`Продолжить: задание ${n}`,repeat:'Повторить задания',doneCount:n=>`${n} из 36 заданий`,
     progress0:'Первое задание уже ждёт.',progressAll:'Миссия выполнена! Все 36 заданий пройдены.',progressHalf:'Ты прошёл больше половины маршрута!',progress6:'Отличный темп. Продолжай!',progressSome:'Хорошее начало. Продолжай!',
     robot0:'Начнём вместе!',robotAll:'Все 36 сделаны!',robotHalf:'Уже половина пути!',robotSome:'Отлично идёшь!',
@@ -43,18 +43,18 @@ const ui = {
     already:'Это задание уже выполнено. Можешь повторить его.',pick:'Выбери один из вариантов ответа.',wrong:'Пока неверно. Прочитай мини-урок или подсказку и попробуй ещё.',correct:x=>`Верно! ${x}`,write:'Сначала допиши своё решение в редакторе.',verify:'Проверь код в компиляторе или по образцу и поставь отметку.',completed:'Отлично! Задание выполнено. Можно идти дальше.'
   },
   en: {
-    skip:'Skip to exercises',nav:'Main navigation',navTopics:'Topics',navTasks:'Exercises',navHow:'How it works',language:'Website language',darkTheme:'Switch to dark theme',lightTheme:'Switch to light theme',
+    skip:'Skip to exercises',nav:'Main navigation',navTopics:'Topics',navTasks:'Exercises',navCompiler:'Compiler',navHow:'How it works',language:'Website language',darkTheme:'Switch to dark theme',lightTheme:'Switch to light theme',
     accountKicker:'PERSONAL PROGRESS',accountTitle:'Learn on any device',accountLead:'Create an account to keep your exercises and drafts in sync across devices.',accountTabs:'Sign in or create an account',signIn:'Sign in',signUp:'Create account',email:'Email address',password:'Password',accountNote:'You may need to confirm your email after signing up.',accountReady:'Progress saved',accountSync:'Exercises and drafts sync with your account.',signOut:'Sign out',accountWait:'Checking your account…',checkEmail:'Check your email and follow the confirmation link, then sign in.',authError:'Could not sign in. Check your email and password.',signupError:'Could not create an account. Check your details and try again.',syncError:'Could not sync progress. Check your connection and try again.',
     heroKicker:'A CALM START WITH C++',heroTitle:'Learning to code feels easier with a clear path.',
     heroLead:'36 bite-sized exercises, 6 friendly topics and a robot to help when you get stuck. Learn at your own pace.',
-    start:'Start learning',viewTopics:'Explore topics',point1:'✓ Short explanations',point2:'✓ Instant quiz feedback',point3:'✓ Progress saved',robotAlt:'C++ Bot robot helper',
+    start:'Start learning',viewTopics:'Explore topics',openCompiler:'C++ compiler',point1:'✓ Short explanations',point2:'✓ Instant quiz feedback',point3:'✓ Progress saved',robotAlt:'C++ Bot robot helper',
     progressLabel:'Your progress',progressTitle:'Your progress',progressBar:'Completed exercises',
     roadKicker:'YOUR PATH',roadTitle:'Six topics. One step at a time.',roadLead:'Start with your first line and work your way to arrays and functions.',
     practiceKicker:'PRACTICE',practiceTitle:'Choose an exercise',practiceLead:'Go in order or pick a topic you like. You can return to any exercise.',
     topicHeading:'Course topics',topicsTip:'Tip: read the mini lesson before the first exercise in each topic.',taskHeading:'Exercises',typeHeading:'Exercise type',all:'All',questions:'Quizzes',code:'Code',todo:'To do',empty:'No exercises here. Try another filter.',
-    howKicker:'HOW IT WORKS',howTitle:'Small steps add up.',step1Title:'Read',step1Text:'Each topic has a short explanation and a C++ example.',step2Title:'Try',step2Text:'Answer a quiz or write code. A hint is nearby.',step3Title:'Check',step3Text:'Quizzes are checked instantly. Run code in your own compiler or compare it with the example.',
+    howKicker:'HOW IT WORKS',howTitle:'Small steps add up.',step1Title:'Read',step1Text:'Each topic has a short explanation and a C++ example.',step2Title:'Try',step2Text:'Answer a quiz or write code. A hint is nearby.',step3Title:'Check',step3Text:'Quizzes are checked instantly. Run code in the built-in compiler.',
     footer:'Learn at your own pace. Come back anytime.',close:'Close exercise',miniLesson:'MINI LESSON',yourTask:'YOUR TASK',yourCode:'Your C++ code',
-    codeNote:'Your draft is saved in this browser. This site does not run C++; use your compiler or compare with the sample solution.',selfCheck:'I checked my code in a compiler or compared it with the solution',
+    codeNote:'Your exercise draft is saved. Open the compiler to run your code and see the result.',runCode:'Run code',selfCheck:'I checked my code in a compiler or compared it with the solution',
     first:'Start the first exercise',continue:n=>`Continue: exercise ${n}`,repeat:'Review exercises',doneCount:n=>`${n} of 36 exercises`,
     progress0:'Your first exercise is ready.',progressAll:'Mission complete! You finished all 36 exercises.',progressHalf:'You are more than halfway there!',progress6:'Great pace. Keep going!',progressSome:'A good start. Keep going!',
     robot0:'Let’s begin together!',robotAll:'All 36 complete!',robotHalf:'Halfway there!',robotSome:'You’ve got this!',
@@ -258,6 +258,13 @@ $('#prevTask').addEventListener('click',()=>openTask(currentTask.id-1));$('#next
 $('#hintButton').addEventListener('click',()=>{const node=$('#hintText');node.hidden=!node.hidden;$('#hintButton').textContent=node.hidden?t().hintShow:t().hintHide});
 $('#solutionButton').addEventListener('click',()=>{const node=$('#solutionBox');node.hidden=!node.hidden;$('#solutionButton').textContent=node.hidden?t().solutionShow:t().solutionHide});
 $('#codeEditor').addEventListener('input',()=>{if(!currentTask||currentTask.type!=='code')return;state.drafts[currentTask.id]=$('#codeEditor').value;saveState()});
+$('#runCodeLink').addEventListener('click',event=>{
+  const code=$('#codeEditor').value;
+  const bytes=new TextEncoder().encode(code);
+  let binary='';
+  bytes.forEach(byte=>{binary+=String.fromCharCode(byte)});
+  event.currentTarget.href=`playground.html#code=${btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}`;
+});
 $('#quizArea').addEventListener('change',()=>{$('#quizArea').querySelectorAll('.quiz-option').forEach(option=>option.classList.remove('is-correct','is-incorrect'));feedback('')});
 $('#checkTask').addEventListener('click',()=>{
   if(!currentTask||currentTask.type!=='quiz')return;const selected=$('#quizArea input:checked');if(!selected){feedback(t().pick,'error');return}
