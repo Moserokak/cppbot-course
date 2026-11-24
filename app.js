@@ -7,6 +7,7 @@ let accountClient = null;
 let accountUser = null;
 let accountMode = 'signin';
 let cloudTimer = null;
+let cloudSyncQueue = Promise.resolve();
 let loadingUserId = null;
 let loadingUserPromise = null;
 try {
@@ -79,13 +80,21 @@ function saveState(){
 async function syncProgress(){
   if(!accountClient||!accountUser)return true;
   clearTimeout(cloudTimer);
-  const {data,error}=await accountClient.rpc('merge_progress',{p_completed:state.completed,p_drafts:state.drafts});
-  if(error){$('#signOutFeedback').textContent=t().syncError;return false}
-  const merged=mergeStates(state,data);
-  if(merged.completed.length!==state.completed.length){state=merged;renderProgress();renderModules();renderTasks()}
-  try{localStorage.setItem(userCacheKey(accountUser.id),JSON.stringify(merged))}catch(_){}
-  $('#signOutFeedback').textContent='';
-  return true;
+  const userId=accountUser.id;
+  cloudSyncQueue=cloudSyncQueue.catch(()=>false).then(async()=>{
+    if(accountUser?.id!==userId)return false;
+    const snapshot=cleanState(state);
+    const {data,error}=await accountClient.rpc('merge_progress',{p_completed:snapshot.completed,p_drafts:snapshot.drafts});
+    if(accountUser?.id!==userId)return false;
+    if(error){$('#signOutFeedback').textContent=t().syncError;return false}
+    const merged=mergeStates(data,state);
+    state=merged;
+    renderProgress();renderModules();renderTasks();
+    try{localStorage.setItem(userCacheKey(userId),JSON.stringify(merged))}catch(_){}
+    $('#signOutFeedback').textContent='';
+    return true;
+  });
+  return cloudSyncQueue;
 }
 function renderAccount(){
   $('#accountButton').textContent=accountUser?(accountUser.email||t().accountReady):t().signIn;
@@ -222,7 +231,7 @@ $('#accountForm').addEventListener('submit',async event=>{
   submit.disabled=true;$('#accountFeedback').textContent=t().accountWait;
   try{
     const result=accountMode==='signup'
-      ?await accountClient.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}})
+      ?await accountClient.auth.signUp({email,password,options:{emailRedirectTo:window.CPPBOT_SUPABASE_CONFIG.siteUrl}})
       :await accountClient.auth.signInWithPassword({email,password});
     if(result.error)throw result.error;
     if(accountMode==='signup'&&!result.data.session){$('#accountFeedback').textContent=t().checkEmail;return}
