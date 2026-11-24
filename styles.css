@@ -12,3 +12,55 @@
 @media(max-width:500px){.module-grid{grid-template-columns:1fr}.hero-points{display:grid;margin-top:25px}.task-dialog{width:calc(100% - 12px);max-height:96vh}.dialog-shell{max-height:96vh;padding:17px}.dialog-actions{bottom:-17px}.dialog-actions .button{flex:1;min-width:120px}.dialog-actions #checkTask,.dialog-actions #completeTask{order:-1;flex-basis:100%}.dialog-lesson pre,.lesson-panel pre,.dialog-help pre{font-size:.75rem}}
 @media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
 @media(max-width:720px){.workspace-layout{grid-template-columns:minmax(0,1fr)}.topics-panel{min-width:0}.module-filter{max-width:100%}}
+.theme-toggle{width:38px;height:38px;flex:none;display:grid;place-items:center;border:1px solid #dce3ef;border-radius:12px;background:#f5f7fc;color:#5c50c3;font-size:1.28rem;line-height:1}.theme-toggle:hover{background:#ebedfc}
+.site-header{background:#ffffffc9;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.hero{position:relative;isolation:isolate;background:linear-gradient(130deg,#f7f7ffdb,#eef5ffdf)}.hero:before{content:"";position:absolute;z-index:-1;inset:0;background:radial-gradient(circle at 83% 25%,#91d9e990,transparent 32%),radial-gradient(circle at 15% 80%,#c0aff36e,transparent 37%);filter:blur(36px);pointer-events:none}.module-card,.topics-panel,.lesson-panel,.task-card,.dashboard,.robot-note{background:#ffffffd9;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+html[data-theme=dark]{color-scheme:dark;background:#0e1525;color:#edf1fc}
+html[data-theme=dark] body{background:#0e1525;color:#edf1fc}
+html[data-theme=dark] .site-header{background:#111b2bdb;border-color:#2b3850}
+html[data-theme=dark] .brand strong,html[data-theme=dark] .header-progress{color:#b5a8ff}
+html[data-theme=dark] .brand-mark{background:#7668db}
+html[data-theme=dark] .main-nav,html[data-theme=dark] .hero-lead,html[data-theme=dark] .section-heading>p,html[data-theme=dark] .module-card p,html[data-theme=dark] .lesson-panel p,html[data-theme=dark] .dashboard-heading p,html[data-theme=dark] .how-steps p,html[data-theme=dark] .topics-tip p,html[data-theme=dark] .dialog-lesson p,html[data-theme=dark] .dialog-topic,html[data-theme=dark] .code-note{color:#aebbd3}
+html[data-theme=dark] .theme-toggle,html[data-theme=dark] .language-switch{background:#243149;border-color:#394860;color:#dacfff}
+html[data-theme=dark] .theme-toggle:hover{background:#344461}
+html[data-theme=dark] .language-switch button{color:#aab6ce}
+html[data-theme=dark] .language-switch button[aria-pressed=true]{background:#5f52bd;color:#fff}
+html[data-theme=dark] .hero{background:linear-gradient(130deg,#141d32,#18243b);border-color:#2b3850}
+html[data-theme=dark] .hero:before{background:radial-gradient(circle at 83% 25%,#415b8a99,transparent 34%),radial-gradient(circle at 16% 78%,#5b4b9477,transparent 38%)}
+html[data-theme=dark] .hero h1,html[data-theme=dark] .dialog-shell h2{color:#f0f3ff}
+html[data-theme=dark] .hero-points,html[data-theme=dark] .meter-label,html[data-theme=dark] .module-status,html[data-theme=dark] .task-card-body small{color:#b4bfd4}
+html[data-theme=dark] .robot-halo{background:radial-gradient(circle,#344665 20%,#243658 55%,transparent 68%)}
+html[data-theme=dark] .dashboard,html[data-theme=dark] .roadmap,html[data-theme=dark] .workspace,html[data-theme=dark] .how{background:#111b2c;border-color:#2b3850}
+html[data-theme=dark] .workspace{background:#0e1728}
+html[data-theme=dark] .module-card,html[data-theme=dark] .topics-panel,html[data-theme=dark] .lesson-panel,html[data-theme=dark] .task-card,html[data-theme=dark] .robot-note,html[data-theme=dark] .task-dialog{background:#1e2a40e8;border-color:#34435e;color:#edf1fc}
+html[data-theme=dark] .module-card:hover,html[data-theme=dark] .task-card:hover{border-color:#9c8ce9}
+html[data-theme=dark] .module-card.is-selected{border-color:#a99af4}
+html[data-theme=dark] .module-card-meter,html[data-theme=dark] .progress-track{background:#34415b}
+html[data-theme=dark] .module-filter button{color:#b7c4dd}
+html[data-theme=dark] .module-filter button:hover,html[data-theme=dark] .module-filter button.is-active{background:#3a346a;color:#fff}
+html[data-theme=dark] .topics-tip,html[data-theme=dark] .how-steps>div{border-color:#33415a}
+html[data-theme=dark] .filter-button,html[data-theme=dark] .dialog-close,html[data-theme=dark] .button-quiet{background:#2d3a54;border-color:#40506d;color:#dce5f8}
+html[data-theme=dark] .filter-button.is-active{background:#7565d9;color:#fff}
+html[data-theme=dark] .dialog-lesson{background:#26344d}
+html[data-theme=dark] .quiz-option{border-color:#41506b;color:#e9edfa}
+html[data-theme=dark] .quiz-option:hover,html[data-theme=dark] .quiz-option:has(input:checked){background:#35345f;border-color:#9687eb}
+html[data-theme=dark] .quiz-option.is-correct,html[data-theme=dark] .quiz-option.is-correct:has(input:checked){background:#164a3b;border-color:#41bc8d;color:#ddfff0}
+html[data-theme=dark] .quiz-option.is-incorrect,html[data-theme=dark] .quiz-option.is-incorrect:has(input:checked){background:#5b293b;border-color:#ed7181;color:#ffe2e7}
+html[data-theme=dark] .code-area .self-check,html[data-theme=dark] .dialog-help p{color:#bec9df}
+html[data-theme=dark] .help-button{background:#393566;color:#ded6ff}
+html[data-theme=dark] .dialog-actions{background:#1e2a40;border-color:#35445d}
+html[data-theme=dark] .site-footer{background:#0b1120}
+html[data-theme=dark] .empty-state{background:#1e2a40;color:#bcc8dd}
+html[data-theme=dark] .text-link,html[data-theme=dark] .eyebrow,html[data-theme=dark] .mini-label{color:#baaaff}
+.account-button{border:1px solid #d8dcef;background:#f1efff;color:#5043aa;border-radius:11px;min-height:38px;max-width:145px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:7px 12px;font-size:.84rem;font-weight:800}.account-button:hover{background:#e8e3ff}.account-dialog{border:0;border-radius:20px;padding:0;width:min(100% - 24px,450px);max-height:90vh;box-shadow:0 28px 70px #17274655;color:#1d2944}.account-dialog::backdrop{background:#172540b8}.account-shell{position:relative;padding:32px}.account-close{position:absolute;top:17px;right:17px}.account-dialog h2{font-size:1.75rem;line-height:1.15;margin:0 35px 10px 0}.account-lead{font-size:.96rem;color:#62718a;margin-bottom:23px}.account-tabs{display:flex;gap:4px;background:#f0f2f8;padding:4px;border-radius:11px;margin-bottom:22px}.account-tabs button{flex:1;border:0;border-radius:8px;background:transparent;padding:10px;font-size:.9rem;font-weight:800;color:#68758c}.account-tabs button[aria-pressed=true]{background:#fff;color:#5446b4;box-shadow:0 2px 7px #2432541e}.account-dialog form{display:grid;gap:9px}.account-dialog form label{font-weight:800;font-size:.87rem}.account-dialog form input{width:100%;height:46px;padding:10px 13px;border:1px solid #d9e1ed;border-radius:10px;background:#fff;color:#1d2944;margin-bottom:8px}.account-submit{width:100%;margin-top:5px}.account-feedback{font-size:.85rem;font-weight:700;color:#b84058;min-height:18px;margin:12px 0 0}.account-note{font-size:.8rem;color:#738199;margin:9px 0 0}.account-dialog #accountEmailLabel{font-weight:800;color:#5548b5}.account-dialog #signOutButton{min-width:130px}
+html[data-theme=dark] .account-button{background:#343059;border-color:#504977;color:#e4dcff}
+html[data-theme=dark] .account-dialog{background:#1e2a40;color:#edf1fc}
+html[data-theme=dark] .account-lead,html[data-theme=dark] .account-note{color:#b3c0d5}
+html[data-theme=dark] .account-tabs{background:#2b3852}
+html[data-theme=dark] .account-tabs button{color:#b3c0d5}
+html[data-theme=dark] .account-tabs button[aria-pressed=true]{background:#5f52bd;color:#fff}
+html[data-theme=dark] .account-dialog form input{background:#26344e;border-color:#455671;color:#fff}
+html[data-theme=dark] .account-dialog #accountEmailLabel{color:#b6aaff}
+@media(max-width:720px){.header-inner{gap:9px}.header-right{gap:7px}.theme-toggle{width:36px;height:36px}.account-button{max-width:72px;padding:7px 8px}.language-switch button{padding:6px 8px}}
+@media(max-width:370px){.brand{font-size:1.1rem;gap:6px}.brand-mark{width:32px;height:32px}.header-inner{gap:5px}.account-button{max-width:58px}.language-switch button{padding:5px 6px}.account-shell{padding:25px 20px}}
+@media(max-width:720px){.hero-inner{grid-template-columns:minmax(0,1fr)}.hero-copy{min-width:0}.hero h1{overflow-wrap:anywhere}}
+@media(max-width:500px){.hero h1{font-size:clamp(2.15rem,9vw,2.65rem)}}

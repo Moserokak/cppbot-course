@@ -1,13 +1,21 @@
 const storageKey = 'cppbot-course-v1';
 const languageKey = 'cppbot-language';
+const themeKey = 'cppbot-theme';
 const totalTasks = tasks.length;
 let state = {completed: [], drafts: {}};
+let accountClient = null;
+let accountUser = null;
+let accountMode = 'signin';
+let cloudTimer = null;
+let loadingUserId = null;
+let loadingUserPromise = null;
 try {
   const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
   state.completed = Array.isArray(saved.completed) ? saved.completed.filter(id => Number.isInteger(id) && id >= 1 && id <= totalTasks) : [];
   state.drafts = saved.drafts && typeof saved.drafts === 'object' ? saved.drafts : {};
 } catch (_) {}
 let language = localStorage.getItem(languageKey) === 'en' ? 'en' : 'ru';
+let theme = localStorage.getItem(themeKey) === 'dark' ? 'dark' : 'light';
 let selectedModule = -1;
 let selectedFilter = 'all';
 let currentTask = null;
@@ -15,7 +23,8 @@ const $ = selector => document.querySelector(selector);
 const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
 const ui = {
   ru: {
-    skip:'Перейти к заданиям',nav:'Основная навигация',navTopics:'Темы',navTasks:'Задания',navHow:'Как учиться',language:'Язык сайта',
+    skip:'Перейти к заданиям',nav:'Основная навигация',navTopics:'Темы',navTasks:'Задания',navHow:'Как учиться',language:'Язык сайта',darkTheme:'Включить тёмную тему',lightTheme:'Включить светлую тему',
+    accountKicker:'ЛИЧНЫЙ ПРОГРЕСС',accountTitle:'Учись с любого устройства',accountLead:'Создай аккаунт, чтобы задания и черновики сохранялись между устройствами.',accountTabs:'Вход или регистрация',signIn:'Войти',signUp:'Регистрация',email:'Электронная почта',password:'Пароль',accountNote:'После регистрации может понадобиться подтвердить почту.',accountReady:'Прогресс сохранён',accountSync:'Задания и черновики синхронизируются с аккаунтом.',signOut:'Выйти',accountWait:'Проверяем аккаунт…',checkEmail:'Проверь почту и перейди по ссылке подтверждения, затем войди.',authError:'Не удалось войти. Проверь почту и пароль.',signupError:'Не удалось создать аккаунт. Проверь данные и попробуй ещё.',syncError:'Не удалось сохранить прогресс в аккаунте. Проверь интернет и попробуй ещё.',
     heroKicker:'ТВОЙ СПОКОЙНЫЙ СТАРТ В C++',heroTitle:'Учиться программировать проще, когда есть план.',
     heroLead:'36 небольших заданий, 6 понятных тем и робот, который подскажет, если застрянешь. Проходи в удобном темпе.',
     start:'Начать обучение',viewTopics:'Посмотреть темы',point1:'✓ Короткие объяснения',point2:'✓ Мгновенная проверка вопросов',point3:'✓ Прогресс сохранится',robotAlt:'Робот помощник C++ Bot',
@@ -33,7 +42,8 @@ const ui = {
     already:'Это задание уже выполнено. Можешь повторить его.',pick:'Выбери один из вариантов ответа.',wrong:'Пока неверно. Прочитай мини-урок или подсказку и попробуй ещё.',correct:x=>`Верно! ${x}`,write:'Сначала допиши своё решение в редакторе.',verify:'Проверь код в компиляторе или по образцу и поставь отметку.',completed:'Отлично! Задание выполнено. Можно идти дальше.'
   },
   en: {
-    skip:'Skip to exercises',nav:'Main navigation',navTopics:'Topics',navTasks:'Exercises',navHow:'How it works',language:'Website language',
+    skip:'Skip to exercises',nav:'Main navigation',navTopics:'Topics',navTasks:'Exercises',navHow:'How it works',language:'Website language',darkTheme:'Switch to dark theme',lightTheme:'Switch to light theme',
+    accountKicker:'PERSONAL PROGRESS',accountTitle:'Learn on any device',accountLead:'Create an account to keep your exercises and drafts in sync across devices.',accountTabs:'Sign in or create an account',signIn:'Sign in',signUp:'Create account',email:'Email address',password:'Password',accountNote:'You may need to confirm your email after signing up.',accountReady:'Progress saved',accountSync:'Exercises and drafts sync with your account.',signOut:'Sign out',accountWait:'Checking your account…',checkEmail:'Check your email and follow the confirmation link, then sign in.',authError:'Could not sign in. Check your email and password.',signupError:'Could not create an account. Check your details and try again.',syncError:'Could not sync progress. Check your connection and try again.',
     heroKicker:'A CALM START WITH C++',heroTitle:'Learning to code feels easier with a clear path.',
     heroLead:'36 bite-sized exercises, 6 friendly topics and a robot to help when you get stuck. Learn at your own pace.',
     start:'Start learning',viewTopics:'Explore topics',point1:'✓ Short explanations',point2:'✓ Instant quiz feedback',point3:'✓ Progress saved',robotAlt:'C++ Bot robot helper',
@@ -53,11 +63,85 @@ const ui = {
 };
 const t = () => ui[language];
 const isDone = id => state.completed.includes(id);
-function saveState(){try{localStorage.setItem(storageKey,JSON.stringify(state))}catch(_){}}
+function cleanState(input){
+  return {
+    completed:Array.isArray(input?.completed)?[...new Set(input.completed.filter(id=>Number.isInteger(id)&&id>=1&&id<=totalTasks))].sort((a,b)=>a-b):[],
+    drafts:input?.drafts&&typeof input.drafts==='object'&&!Array.isArray(input.drafts)?input.drafts:{}
+  };
+}
+function readStored(key){try{return cleanState(JSON.parse(localStorage.getItem(key)||'{}'))}catch(_){return cleanState({})}}
+function userCacheKey(id){return `cppbot-course-user-${id}`}
+function mergeStates(...items){return cleanState({completed:items.flatMap(item=>item?.completed||[]),drafts:Object.assign({},...items.map(item=>item?.drafts||{}))})}
+function saveState(){
+  try{localStorage.setItem(accountUser?userCacheKey(accountUser.id):storageKey,JSON.stringify(state))}catch(_){}
+  if(accountUser){clearTimeout(cloudTimer);cloudTimer=setTimeout(syncProgress,500)}
+}
+async function syncProgress(){
+  if(!accountClient||!accountUser)return true;
+  clearTimeout(cloudTimer);
+  const {data,error}=await accountClient.rpc('merge_progress',{p_completed:state.completed,p_drafts:state.drafts});
+  if(error){$('#signOutFeedback').textContent=t().syncError;return false}
+  const merged=mergeStates(state,data);
+  if(merged.completed.length!==state.completed.length){state=merged;renderProgress();renderModules();renderTasks()}
+  try{localStorage.setItem(userCacheKey(accountUser.id),JSON.stringify(merged))}catch(_){}
+  $('#signOutFeedback').textContent='';
+  return true;
+}
+function renderAccount(){
+  $('#accountButton').textContent=accountUser?(accountUser.email||t().accountReady):t().signIn;
+  $('#accountSignedOut').hidden=Boolean(accountUser);
+  $('#accountSignedIn').hidden=!accountUser;
+  $('#accountDialog').setAttribute('aria-labelledby',accountUser?'accountReadyTitle':'accountTitle');
+  $('#accountEmailLabel').textContent=accountUser?.email||'';
+  $('#accountSubmit').textContent=accountMode==='signin'?t().signIn:t().signUp;
+  document.querySelectorAll('[data-auth-mode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.authMode===accountMode)));
+  $('#accountPassword').autocomplete=accountMode==='signin'?'current-password':'new-password';
+}
+async function activateAccount(user){
+  if(!user){accountUser=null;state=readStored(storageKey);renderAccount();renderProgress();renderModules();renderTasks();return}
+  if(accountUser?.id===user.id)return;
+  if(loadingUserId===user.id)return loadingUserPromise;
+  loadingUserId=user.id;
+  loadingUserPromise=(async()=>{
+    const {data,error}=await accountClient.from('user_progress').select('completed,drafts').eq('user_id',user.id).maybeSingle();
+    if(error)throw error;
+    const merged=mergeStates(data,readStored(userCacheKey(user.id)),readStored(storageKey));
+    const result=await accountClient.rpc('merge_progress',{p_completed:merged.completed,p_drafts:merged.drafts});
+    if(result.error)throw result.error;
+    state=mergeStates(merged,result.data);
+    accountUser=user;
+    try{localStorage.removeItem(storageKey);localStorage.setItem(userCacheKey(user.id),JSON.stringify(state))}catch(_){}
+    renderAccount();renderProgress();renderModules();renderTasks();
+  })();
+  try{return await loadingUserPromise}finally{loadingUserId=null;loadingUserPromise=null}
+}
+async function initializeAccount(){
+  try{
+    accountClient=await window.cppbotAuthReady;
+    if(!accountClient)return;
+    $('#accountButton').hidden=false;
+    renderAccount();
+    accountClient.auth.onAuthStateChange((event,session)=>{
+      if(event==='SIGNED_IN'||event==='SIGNED_OUT'||event==='INITIAL_SESSION'){
+        setTimeout(()=>activateAccount(session?.user||null).catch(()=>{$('#accountFeedback').textContent=t().syncError}),0);
+      }
+    });
+    const {data,error}=await accountClient.auth.getUser();
+    if(error)throw error;
+    await activateAccount(data.user||null);
+  }catch(_){$('#accountFeedback').textContent=t().syncError}
+}
 function setDone(id){if(!isDone(id)){state.completed.push(id);state.completed.sort((a,b)=>a-b);saveState()}renderProgress();renderModules();renderTasks()}
 function moduleAt(index){const base=modules[index];return language==='en'?{...base,...enModules[index],example:translateCode(base.example)}:base}
 function taskAt(id){const base=tasks[id-1];if(!base)return null;if(language==='ru')return base;const translated=enModules[base.moduleIndex].tasks[(id-1)%6];return {...base,...translated,starter:translateCode(base.starter),solution:translateCode(base.solution)}}
 function feedback(message,kind=''){const node=$('#dialogFeedback');node.textContent=message;node.className=`dialog-feedback ${kind}`}
+function applyTheme(){
+  document.documentElement.dataset.theme=theme;
+  $('#themeIcon').textContent=theme==='dark'?'☀':'☾';
+  const label=theme==='dark'?t().lightTheme:t().darkTheme;
+  $('#themeToggle').setAttribute('aria-label',label);
+  $('#themeToggle').title=label;
+}
 function applyTranslations(){
   document.documentElement.lang=language;
   document.title=language==='en'?'C++ Bot — learn by doing':'C++ Bot — учись на практике';
@@ -66,6 +150,8 @@ function applyTranslations(){
   document.querySelectorAll('[data-i18n-aria]').forEach(node=>{node.setAttribute('aria-label',t()[node.dataset.i18nAria])});
   document.querySelectorAll('[data-i18n-alt]').forEach(node=>{node.alt=t()[node.dataset.i18nAlt]});
   document.querySelectorAll('[data-lang]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.lang===language)));
+  applyTheme();
+  renderAccount();
 }
 function renderProgress(){
   const count=state.completed.length,percent=Math.round(count/totalTasks*100),next=tasks.find(task=>!isDone(task.id))?.id||1;
@@ -123,6 +209,40 @@ $('#moduleFilter').addEventListener('click',event=>{const button=event.target.cl
 document.querySelectorAll('.filter-button').forEach(button=>button.addEventListener('click',()=>{selectedFilter=button.dataset.filter;document.querySelectorAll('.filter-button').forEach(item=>{item.classList.toggle('is-active',item===button);item.setAttribute('aria-pressed',String(item===button))});renderTasks()}));
 $('#taskList').addEventListener('click',event=>{const button=event.target.closest('[data-task]');if(button)openTask(Number(button.dataset.task))});
 document.querySelectorAll('[data-lang]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.lang===language)return;const openId=$('#taskDialog').open?currentTask?.id:null;language=button.dataset.lang;try{localStorage.setItem(languageKey,language)}catch(_){}applyTranslations();renderProgress();renderModules();renderTasks();if(openId)openTask(openId)}));
+$('#themeToggle').addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';try{localStorage.setItem(themeKey,theme)}catch(_){}applyTheme()});
+$('#accountButton').addEventListener('click',()=>{$('#accountFeedback').textContent='';$('#signOutFeedback').textContent='';renderAccount();$('#accountDialog').showModal()});
+$('#accountClose').addEventListener('click',()=>$('#accountDialog').close());
+document.querySelectorAll('[data-auth-mode]').forEach(button=>button.addEventListener('click',()=>{accountMode=button.dataset.authMode;$('#accountFeedback').textContent='';renderAccount()}));
+$('#accountForm').addEventListener('submit',async event=>{
+  event.preventDefault();
+  if(!accountClient)return;
+  const email=$('#accountEmail').value.trim();
+  const password=$('#accountPassword').value;
+  const submit=$('#accountSubmit');
+  submit.disabled=true;$('#accountFeedback').textContent=t().accountWait;
+  try{
+    const result=accountMode==='signup'
+      ?await accountClient.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}})
+      :await accountClient.auth.signInWithPassword({email,password});
+    if(result.error)throw result.error;
+    if(accountMode==='signup'&&!result.data.session){$('#accountFeedback').textContent=t().checkEmail;return}
+    if(result.data.user)await activateAccount(result.data.user);
+    $('#accountDialog').close();$('#accountPassword').value='';
+  }catch(_){$('#accountFeedback').textContent=accountMode==='signup'?t().signupError:t().authError}
+  finally{submit.disabled=false}
+});
+$('#signOutButton').addEventListener('click',async()=>{
+  if(!accountClient||!accountUser)return;
+  $('#signOutButton').disabled=true;
+  try{
+    if(!await syncProgress())return;
+    const {error}=await accountClient.auth.signOut();
+    if(error)throw error;
+    await activateAccount(null);
+    $('#accountDialog').close();
+  }catch(_){$('#signOutFeedback').textContent=t().syncError}
+  finally{$('#signOutButton').disabled=false}
+});
 $('#heroStart').addEventListener('click',startCourse);$('#progressStart').addEventListener('click',startCourse);
 $('#dialogClose').addEventListener('click',()=>$('#taskDialog').close());
 $('#prevTask').addEventListener('click',()=>openTask(currentTask.id-1));$('#nextTask').addEventListener('click',()=>openTask(currentTask.id+1));
@@ -144,3 +264,4 @@ $('#completeTask').addEventListener('click',()=>{
 });
 $('#year').textContent=new Date().getFullYear();
 applyTranslations();renderProgress();renderModules();renderTasks();
+initializeAccount();

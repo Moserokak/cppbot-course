@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="styles.css">
   <script src="data.js" defer></script>
   <script src="en.js" defer></script>
+  <script src="supabase-config.js" defer></script>
+  <script src="auth.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -19,7 +21,9 @@
       <nav class="main-nav" aria-label="Основная навигация" data-i18n-aria="nav"><a href="#roadmap" data-i18n="navTopics">Темы</a><a href="#workspace" data-i18n="navTasks">Задания</a><a href="#how" data-i18n="navHow">Как учиться</a></nav>
       <div class="header-right">
         <span class="header-progress" id="headerCount">0 / 36</span>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Включить тёмную тему" title="Включить тёмную тему"><span id="themeIcon" aria-hidden="true">☾</span></button>
         <div class="language-switch" role="group" aria-label="Язык сайта" data-i18n-aria="language"><button type="button" data-lang="ru" aria-pressed="true">RU</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
+        <button class="account-button" id="accountButton" type="button" hidden>Войти</button>
       </div>
     </div>
   </header>
@@ -73,6 +77,19 @@
     <div class="dialog-help"><button type="button" class="help-button" id="hintButton"></button><p id="hintText" hidden></p><button type="button" class="help-button" id="solutionButton" hidden></button><pre id="solutionBox" hidden><code id="solutionCode"></code></pre></div>
     <div class="dialog-feedback" id="dialogFeedback" role="status" aria-live="polite"></div>
     <div class="dialog-actions"><button class="button button-quiet" type="button" id="prevTask"></button><button class="button button-primary" type="button" id="checkTask"></button><button class="button button-primary" type="button" id="completeTask" hidden></button><button class="button button-quiet" type="button" id="nextTask"></button></div>
+  </div></dialog>
+  <dialog class="account-dialog" id="accountDialog" aria-labelledby="accountTitle"><div class="account-shell">
+    <button class="dialog-close account-close" id="accountClose" type="button" aria-label="Закрыть" data-i18n-aria="close">×</button>
+    <div id="accountSignedOut">
+      <p class="eyebrow" data-i18n="accountKicker">ЛИЧНЫЙ ПРОГРЕСС</p>
+      <h2 id="accountTitle" data-i18n="accountTitle">Учись с любого устройства</h2>
+      <p class="account-lead" data-i18n="accountLead">Создай аккаунт, чтобы задания и черновики сохранялись между устройствами.</p>
+      <div class="account-tabs" role="group" aria-label="Вход или регистрация" data-i18n-aria="accountTabs"><button type="button" data-auth-mode="signin" aria-pressed="true" data-i18n="signIn">Войти</button><button type="button" data-auth-mode="signup" aria-pressed="false" data-i18n="signUp">Регистрация</button></div>
+      <form id="accountForm"><label for="accountEmail" data-i18n="email">Электронная почта</label><input id="accountEmail" type="email" autocomplete="email" required placeholder="you@example.com"><label for="accountPassword" data-i18n="password">Пароль</label><input id="accountPassword" type="password" autocomplete="current-password" minlength="6" required><button class="button button-primary account-submit" id="accountSubmit" type="submit">Войти</button></form>
+      <p class="account-feedback" id="accountFeedback" role="status" aria-live="polite"></p>
+      <p class="account-note" data-i18n="accountNote">После регистрации может понадобиться подтвердить почту.</p>
+    </div>
+    <div id="accountSignedIn" hidden><p class="eyebrow" data-i18n="accountKicker">ЛИЧНЫЙ ПРОГРЕСС</p><h2 id="accountReadyTitle" data-i18n="accountReady">Прогресс сохранён</h2><p id="accountEmailLabel"></p><p class="account-lead" data-i18n="accountSync">Задания и черновики синхронизируются с аккаунтом.</p><button class="button button-quiet" id="signOutButton" type="button" data-i18n="signOut">Выйти</button><p class="account-feedback" id="signOutFeedback" role="status" aria-live="polite"></p></div>
   </div></dialog>
 </body>
 </html>
